@@ -10,6 +10,8 @@ import unittest
 class TestBaseModel(unittest.TestCase):
     """The test class"""
 
-    def test_save(self):
+    def test_object_type(self):
         bm = BaseModel()
-        self.assertEquals(bm.updated_at, datetime.datetime.now())
+        self.assertIsInstance(bm.created_at, datetime.datetime)
+        self.assertIsInstance(bm.updated_at, datetime.datetime)
+        self.assertIsInstance(bm.id, str)
