@@ -10,6 +10,10 @@ class BaseModel:
     """BaseModel class that contains every method that we are going to use"""
     def __init__(self, *args, **kwargs):
         """Constructor of the BaseModel class"""
+        # dictionary = {"name": "Ussmmne"}
+        # tuple  = ("Create", )
+        # BaseModel(*tuple, **dictionary)
+        # BaseModel(("create", ), {"name": "Ussumane"})
         # print(args) - tuple
         # print(kwargs) - dictionary with key, value
         if len(kwargs) != 0:
@@ -17,6 +21,8 @@ class BaseModel:
                 if key != "__class__":
                     if key == "created_at" or key == "updated_at":
                         # fromisoformat converte string para datetime
+                        # set attribute - setattr(obj, variavel, valor)
+                        # self.id = valor
                         setattr(self, key, datetime.fromisoformat(kwargs[key]))
                     else:
                         setattr(self, key, kwargs[key])
@@ -42,6 +48,7 @@ class BaseModel:
         Returns a dictionary containing all keys/values of __dict__
         """
         dictionary = self.__dict__
+        # <class 'BaseModel'>.__name__ => BaseModel
         dictionary["__class__"] = type(self).__name__
         dictionary["created_at"] = self.created_at.isoformat()
         dictionary["updated_at"] = self.updated_at.isoformat()
