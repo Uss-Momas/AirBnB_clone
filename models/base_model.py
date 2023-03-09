@@ -14,7 +14,6 @@ class BaseModel:
         # print(kwargs) - dictionary with key, value
         if len(kwargs) != 0:
             for key in kwargs.keys():
-                print(key)
                 if key != "__class__":
                     if key == "created_at" or key == "updated_at":
                         # fromisoformat converte string para datetime
