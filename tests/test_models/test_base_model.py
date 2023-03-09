@@ -15,3 +15,11 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(bm.created_at, datetime.datetime)
         self.assertIsInstance(bm.updated_at, datetime.datetime)
         self.assertIsInstance(bm.id, str)
+
+    def test_to_dict(self):
+        bm = BaseModel()
+        dct = bm.to_dict()
+        self.assertIsInstance(dct, dict)
+
+    def test_initialize_fake_args(self):
+        ...
