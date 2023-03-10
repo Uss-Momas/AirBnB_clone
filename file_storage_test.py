@@ -13,8 +13,8 @@ my_model.save()
 # print(my_model)
 
 fs = FileStorage()
-fs.new(my_model)
-fs.save()
+# fs.new(my_model)
+# fs.save()
 
 print("---RELODING FILE__")
 fs.reload()

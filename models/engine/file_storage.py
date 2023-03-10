@@ -8,10 +8,8 @@ class FileStorage:
     With Methods and variables
     """
 
-    def __init__(self):
-        """Constructor"""
-        self.__file_path = "../../file.json"
-        self.__objects = {}
+    __file_path = "file.json"
+    __objects = {}
 
     def all(self):
         """returns the dictionary __objects"""
@@ -32,3 +30,11 @@ class FileStorage:
 
     def reload(self):
         """deserializes the JSON file to __objects"""
+        try:
+            with open(self.__file_path, encoding="utf-8") as f:
+                loaded_content = f.read()
+                json_dict = json.loads(loaded_content)
+                print(loaded_content)
+                print(json_dict)
+        except FileNotFoundError:
+            pass
