@@ -4,6 +4,7 @@ defines all common attributes/methods for other classes
 """
 from datetime import datetime
 import uuid
+import models
 
 
 class BaseModel:
@@ -42,6 +43,7 @@ class BaseModel:
         """
         # time.sleep(5)
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         """Method that:
