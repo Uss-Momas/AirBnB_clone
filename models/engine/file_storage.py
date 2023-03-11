@@ -1,36 +1,56 @@
 #!/usr/bin/python3
-"""File Storage Module"""
+"""file_storage module"""
 import json
+from models.base_model import BaseModel
 
 
 class FileStorage:
-    """File Storage class
-    With Methods and variables
-    """
-
+    """FileStorage class"""
     __file_path = "file.json"
     __objects = {}
 
     def all(self):
-        """returns the dictionary __objects"""
-        return self.__objects
+        """All method"""
+        return FileStorage.__objects
 
     def new(self, obj):
-        """Sets in __objects the obj with key"""
+        """new object method"""
         key = type(obj).__name__ + "." + obj.id
-        self.__objects[key] = obj.to_dict()
+        # print(key)
+        FileStorage.__objects[key] = obj
 
     def save(self):
-        """Serializes __objects to the JSON file"""
-        with open(self.__file_path, "w", encoding="utf-8") as f:
-            json_str = json.dumps(self.__objects)
+        """Save file
+        Serializes the python object to be a json string
+        """
+        objects_dictionary = {}
+        with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
+            for key, obj in FileStorage.__objects.items():
+                obj_dict = obj.to_dict()
+                # print("Key: ", key)
+                # print("Value: ", obj)
+                # print("Object dictionary: ", obj_dict)
+                objects_dictionary[key] = obj_dict
+                # print(objects_dictionary)
+            json_str = json.dumps(objects_dictionary)
+            # print(json_str)
             f.write(json_str)
 
     def reload(self):
-        """deserializes the JSON file to __objects"""
+        """Reload method
+        Reload the json information from a file and deserialize it to be
+        python obj
+        """
         try:
-            with open(self.__file_path, encoding="utf-8") as f:
-                loaded_content = f.read()
-                self.__objects = json.loads(loaded_content)
-        except FileNotFoundError:
+            with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+                json_loaded = json.loads(content)
+                # print(json_loaded)
+                for key, value in json_loaded.items():
+                    # print("Key: ", key)
+                    # print("Value: ", value)
+                    obj = BaseModel(**value)
+                    FileStorage.__objects[key] = obj
+                    # print(obj)
+        except Exception:
             pass

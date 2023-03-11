@@ -2,9 +2,9 @@
 """Base Model module
 defines all common attributes/methods for other classes
 """
-from models import storage
 from datetime import datetime
 import uuid
+import models
 
 
 class BaseModel:
@@ -17,7 +17,6 @@ class BaseModel:
         # BaseModel(("create", ), {"name": "Ussumane"})
         # print(args) - tuple
         # print(kwargs) - dictionary with key, value
-        print(self)
         if len(kwargs) != 0:
             for key in kwargs.keys():
                 if key != "__class__":
@@ -32,7 +31,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            # storage.new(self)
+            models.storage.new(self)
 
     def __str__(self):
         """String representation of the BaseModel class"""
@@ -45,7 +44,7 @@ class BaseModel:
         """
         # time.sleep(5)
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         """Method that:
