@@ -92,6 +92,7 @@ class HBNBCommand(cmd.Cmd):
                 if len(line.split(" ")) >= 2:
                     match = False
                     id = line.split(" ")[1]
+                    print(id)
                     dictionary = storage.all()
                     for key, value in dictionary.items():
                         id_key = key.split(".")[1]
@@ -108,6 +109,42 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** class doesn't exist **")
 
+    def do_update(self, line):
+        """update: update an instance based on the classname and id
+        usage: update <class name> <id> <attribute name> "<attribute value>
+        """
+        if line:
+            class_name = line.split(" ")[0]
+            if class_name in HBNBCommand.class_names_list:
+                length = len(line.split(" "))
+                if length >= 2:
+                    match = False
+                    dict_objs = storage.all()
+                    id = line.split(" ")[1]
+                    for key, value in dict_objs.items():
+                        id_key = key.split(".")[1]
+                        if id == id_key:
+                            match = True
+                            obj = value
+                            break
+                    if match:
+                        if length >= 3:
+                            att_name = line.split(" ")[2]
+                            if length >= 4:
+                                value_att = line.split(" ")[3]
+                                obj_dict = obj.to_dict()
+                                obj_dict[att_name] = value_att
+                                storage.save()
+                            else:
+                                print("** value missing **")
+                        else:
+                            print("** attribute name missing **")
+                    else:
+                        print("** no instance found **")
+                else:
+                    print("** instance id missing **")
+            else:
+                print("** class doesn't exist **")
         else:
             print("** class name missing **")
 
