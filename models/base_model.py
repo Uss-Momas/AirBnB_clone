@@ -10,7 +10,11 @@ import models
 class BaseModel:
     """BaseModel class that contains every method that we are going to use"""
     def __init__(self, *args, **kwargs):
-        """Constructor of the BaseModel class"""
+        """Constructor of the BaseModel class
+        Args:
+            - *args: tuple of arguments
+            - **kwargs: dict of key-values arguments
+        """
         # dictionary = {"name": "Ussmmne"}
         # tuple  = ("Create", )
         # BaseModel(*tuple, **dictionary)
@@ -50,9 +54,9 @@ class BaseModel:
         """Method that:
         Returns a dictionary containing all keys/values of __dict__
         """
-        dictionary = self.__dict__
+        dictionary = self.__dict__.copy()
         # <class 'BaseModel'>.__name__ => BaseModel
         dictionary["__class__"] = type(self).__name__
-        dictionary["created_at"] = self.created_at.isoformat()
-        dictionary["updated_at"] = self.updated_at.isoformat()
+        dictionary["created_at"] = dictionary["created_at"].isoformat()
+        dictionary["updated_at"] = dictionary["updated_at"].isoformat()
         return dictionary

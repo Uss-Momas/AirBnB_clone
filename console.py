@@ -71,6 +71,7 @@ class HBNBCommand(cmd.Cmd):
                     if match:
                         dictionary.pop(key)
                         storage.save()
+                        storage.reload()
                     else:
                         print("** no instance found **")
                 else:
@@ -109,44 +110,38 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** class doesn't exist **")
 
-    def do_update(self, line):
+    def do_update(self, args):
         """update: update an instance based on the classname and id
         usage: update <class name> <id> <attribute name> "<attribute value>
         """
-        if line:
-            class_name = line.split(" ")[0]
-            if class_name in HBNBCommand.class_names_list:
-                length = len(line.split(" "))
-                if length >= 2:
-                    match = False
-                    dict_objs = storage.all()
-                    id = line.split(" ")[1]
-                    for key, value in dict_objs.items():
-                        id_key = key.split(".")[1]
-                        if id == id_key:
-                            match = True
-                            obj = value
-                            break
-                    if match:
-                        if length >= 3:
-                            att_name = line.split(" ")[2]
-                            if length >= 4:
-                                value_att = line.split(" ")[3]
-                                obj_dict = obj.to_dict()
-                                obj_dict[att_name] = value_att
-                                storage.save()
-                            else:
-                                print("** value missing **")
-                        else:
-                            print("** attribute name missing **")
-                    else:
-                        print("** no instance found **")
-                else:
-                    print("** instance id missing **")
-            else:
-                print("** class doesn't exist **")
-        else:
+        arg = args.split()
+        sw = 0
+        if len(arg) < 1:
             print("** class name missing **")
+        elif arg[0] not in HBNBCommand.class_names_list:
+            print("** class doesn't exist **")
+        elif len(arg) < 2:
+            print("** instance id missing **")
+        elif len(arg) < 3:
+            print("** attribute name missing **")
+        elif len(arg) < 4:
+            print("** value missing **")
+        else:
+            in_key = (arg[0] + "." + arg[1])
+            for key, obj in storage.all().items():
+                if key == in_key:
+                    idx_arg = len(arg[0]) + len(arg[1]) + len(arg[2]) + 3
+                    value = args[idx_arg:]
+                    if args[idx_arg] == "\"":
+                        idx_arg += 1
+                        value = args[idx_arg:-1]
+                    if hasattr(obj, arg[2]):
+                        value = type(getattr(obj, arg[2]))(args[idx_arg:])
+                    setattr(obj, arg[2], value)
+                    sw = 1
+                    storage.save()
+            if sw == 0:
+                print("** no instance found **")
 
     # methods to exit the program
     def do_quit(self, line):

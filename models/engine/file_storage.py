@@ -15,9 +15,10 @@ class FileStorage:
 
     def new(self, obj):
         """new object method"""
-        key = type(obj).__name__ + "." + obj.id
-        # print(key)
-        FileStorage.__objects[key] = obj
+        if obj:
+            key = type(obj).__name__ + "." + obj.id
+            # print(key)
+            FileStorage.__objects[key] = obj
 
     def save(self):
         """Save file
@@ -26,11 +27,10 @@ class FileStorage:
         objects_dictionary = {}
         with open(FileStorage.__file_path, "w", encoding="utf-8") as f:
             for key, obj in FileStorage.__objects.items():
-                obj_dict = obj.to_dict()
                 # print("Key: ", key)
                 # print("Value: ", obj)
                 # print("Object dictionary: ", obj_dict)
-                objects_dictionary[key] = obj_dict
+                objects_dictionary[key] = obj.to_dict()
                 # print(objects_dictionary)
             json_str = json.dumps(objects_dictionary)
             # print(json_str)
