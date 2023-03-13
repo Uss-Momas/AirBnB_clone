@@ -3,13 +3,139 @@
 import cmd
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
     """Console Class"""
 
     prompt = "(hbnb)"
-    class_names_list = ["BaseModel"]
+    class_names_list = ["BaseModel", "User"]
+
+    def do_create(self, classname):
+        """create: creates a new instance of the BaseModel,
+        save it to JSON file and prints the id
+        usage: create class_name"""
+        if classname:
+            if classname in HBNBCommand.class_names_list:
+                if classname == "BaseModel":
+                    new_model = BaseModel()
+                elif classname == "User":
+                    new_model = User()
+                new_model.save()
+                print(new_model.id)
+            else:
+                print("** class doesn't exist **")
+        else:
+            print("** class name missing **")
+
+    def do_show(self, line):
+        """show: prints the string representation of a instance based on
+        the class name and id.
+        usage: show class_name id
+        """
+        args = line.split()
+        if line:
+            if args[0] not in HBNBCommand.class_names_list:
+                print("** class doesn't exist **")
+            elif len(args) < 2:
+                print("** instance id missing **")
+            # class name exists and id also exits
+            else:
+                class_name = args[0]
+                id = args[1]
+                found = False
+                key_id = class_name + "." + id
+                obj_dict = storage.all()
+                for key, value in obj_dict.items():
+                    if key_id == key:
+                        found = True
+                        print(value)
+                        break
+                if not found:
+                    print("** no instance found **")
+        else:
+            print("** class name missing **")
+        # if line:
+        #    class_name = line.split(" ")[0]
+        #    if class_name in HBNBCommand.class_names_list:
+        #        if len(line.split(" ")) >= 2:
+        #            match = False
+        #            id = line.split(" ")[1]
+        #            # print(id)
+        #            dictionary = storage.all()
+        #            for key, value in dictionary.items():
+        #                id_key = key.split(".")[1]
+        #                if id == id_key:
+        #                    match = True
+        #                   break
+        #            if match:
+        #                print(obj)
+        #            else:
+        #                print("** no instance found **")
+        #        else:
+        #            print("** instance id missing **")
+        #    else:
+        #        print("** class doesn't exist **")
+        #else:
+        #    print("** class name missing **")
+        
+    def do_destroy(self, line):
+        """detroy: Deletes and instance based on a class name and id
+        usage: destroy class_name id
+        """
+        args = line.split()
+
+        if line:
+            if args[0] not in HBNBCommand.class_names_list:
+                print("** class doesn't exist **")
+            elif len(args) < 2:
+                print("** instance id missing **")
+            else:
+                found = False
+                class_name = args[0]
+                id = args[1]
+                name_id_key = class_name + "." + id
+                obj_dict = storage.all()
+                for key, value in obj_dict.items():
+                    if name_id_key == key:
+                        print(value)
+                        found = True
+                        storage.all().pop(name_id_key)
+                        storage.save()
+                        storage.reload()
+                        break
+                if not found:
+                    print("** no instance found **")
+        else:
+            print("** class name missing **")
+
+        # if line:
+        #    class_name = line.split(" ")[0]
+        #    if class_name in HBNBCommand.class_names_list:
+        #        length = len(line.split(" "))
+        #        if length >= 2:
+        #            match = False
+        #            dictionary = storage.all()
+        #            id = line.split(" ")[1]
+        #            for key, value in dictionary.items():
+        #                id_key = key.split(".")[1]
+        #                if id == id_key:
+        #                    match = True
+        #                    key = key
+        #                    break
+        #            if match:
+        #                dictionary.pop(key)
+        #                storage.save()
+        #                storage.reload()
+        #            else:
+        #                print("** no instance found **")
+        #        else:
+        #            print("** instance id missing **")
+        #    else:
+        #        print("** class doesn't exist **")
+        # else:
+        #    print("** class name missing **")
 
     # general purpose methods of the program
     def do_all(self, line):
@@ -35,82 +161,6 @@ class HBNBCommand(cmd.Cmd):
                 if cls_name in HBNBCommand.class_names_list:
                     str_list_cls_name.append(str(obj))
             print(str_list_cls_name)
-
-    def do_create(self, classname):
-        """create: creates a new instance of the BaseModel,
-        save it to JSON file and prints the id
-        usage: create class_name"""
-        if classname:
-            if classname in HBNBCommand.class_names_list:
-                new_model = BaseModel()
-                new_model.save()
-                print(new_model.id)
-            else:
-                print("** class doesn't exist **")
-        else:
-            print("** class name missing **")
-
-    def do_destroy(self, line):
-        """detroy: Deletes and instance based on a class name and id
-        usage: destroy class_name id
-        """
-        if line:
-            class_name = line.split(" ")[0]
-            if class_name in HBNBCommand.class_names_list:
-                length = len(line.split(" "))
-                if length >= 2:
-                    match = False
-                    dictionary = storage.all()
-                    id = line.split(" ")[1]
-                    for key, value in dictionary.items():
-                        id_key = key.split(".")[1]
-                        if id == id_key:
-                            match = True
-                            key = key
-                            break
-                    if match:
-                        dictionary.pop(key)
-                        storage.save()
-                        storage.reload()
-                    else:
-                        print("** no instance found **")
-                else:
-                    print("** instance id missing **")
-
-            else:
-                print("** class doesn't exist **")
-        else:
-            print("** class name missing **")
-
-    def do_show(self, line):
-        """show: prints the string representation of a instance based on
-        the class name and id.
-        usage: show class_name id
-        """
-        if line:
-            class_name = line.split(" ")[0]
-            if class_name in HBNBCommand.class_names_list:
-                if len(line.split(" ")) >= 2:
-                    match = False
-                    id = line.split(" ")[1]
-                    print(id)
-                    dictionary = storage.all()
-                    for key, value in dictionary.items():
-                        id_key = key.split(".")[1]
-                        if id == id_key:
-                            match = True
-                            obj = value
-                            break
-                    if match:
-                        print(obj)
-                    else:
-                        print("** no instance found **")
-                else:
-                    print("** instance id missing **")
-            else:
-                print("** class doesn't exist **")
-        else:
-            print("** class name missing **")
 
     def do_update(self, args):
         """update: update an instance based on the classname and id
