@@ -3,6 +3,11 @@
 import json
 from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 
 class FileStorage:
@@ -54,6 +59,16 @@ class FileStorage:
                         obj = BaseModel(**value)
                     elif key.split(".")[0] == "User":
                         obj = User(**value)
+                    elif key.split(".")[0] == "Place":
+                        obj = Place(**value)
+                    elif key.split(".")[0] == "City":
+                        obj = City(**value)
+                    elif key.split(".")[0] == "State":
+                        obj = State(**value)
+                    elif key.split(".")[0] == "Amenity":
+                        obj = Amenity(**value)
+                    elif key.split(".")[0] == "Review":
+                        obj = Review(**value)
                     FileStorage.__objects[key] = obj
                     # print(obj)
         except Exception:

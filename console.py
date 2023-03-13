@@ -4,6 +4,11 @@ import cmd
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -22,6 +27,13 @@ class HBNBCommand(cmd.Cmd):
                     new_model = BaseModel()
                 elif classname == "User":
                     new_model = User()
+                elif classname == "State":
+                    new_model = State()
+                elif classname == "City":
+                    new_model = City()
+                elif classname == "Place":
+                    new_model = Place()
+                elif cl
                 new_model.save()
                 print(new_model.id)
             else:
