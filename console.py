@@ -15,7 +15,8 @@ class HBNBCommand(cmd.Cmd):
     """Console Class"""
 
     prompt = "(hbnb)"
-    class_names_list = ["BaseModel", "User", "Place", "State", "City", "Amenity", "Review"]
+    class_names_list = ["BaseModel", "User", "Place", "State", "City",
+                        "Amenity", "Review"]
 
     def do_create(self, classname):
         """create: creates a new instance of the BaseModel,
@@ -39,6 +40,8 @@ class HBNBCommand(cmd.Cmd):
                     new_model = City()
                 elif classname == "Amenity":
                     new_model = Amenity()
+                elif classname == "Review":
+                    new_model = Review()
                 new_model.save()
                 print(new_model.id)
             else:
