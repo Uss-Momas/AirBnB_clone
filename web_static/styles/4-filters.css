@@ -4,7 +4,8 @@
   width: 100%;
   border: 1px solid #DDDDDD;
   border-radius: 4px;
-  position: relative;
+  display: flex;
+  justify-content: end;
 }
 
 
